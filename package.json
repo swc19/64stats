@@ -1,0 +1,32 @@
+{
+  "name": "64stats",
+  "version": "0.0.1",
+  "description": "data aggregation of smash 64 stats",
+  "main": "server/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swc19/64stats.git"
+  },
+  "author": "swc19",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/swc19/64stats/issues"
+  },
+  "homepage": "https://github.com/swc19/64stats#readme",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "node-fetch": "^3.0.0",
+    "pg": "^8.7.1",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.13"
+  }
+}

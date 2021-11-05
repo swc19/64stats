@@ -1,78 +1,36 @@
-import fetch from 'node-fetch';
 import express from 'express';
+import dotenv from 'dotenv';
+dotenv.config({path: '../.env'});
 import asyncHandler from "express-async-handler";
-const api_key = process.env.API_KEY;
-const server = express()
-const port = 3000
+const server = express();
+const port = 3000;
+import {sequelize} from "./db.js";
+import {insertTournament, tourneyImport} from "./smashgg/tournaments/tournament-queries.js";
+import * as event_query from "./smashgg/events/event-queries.js";
+import * as set_query from "./smashgg/sets/set-queries.js";
+import * as player_query from "./smashgg/players/player-queries.js";
+
+await sequelize.sync({force: true});
 
 server.get('/', asyncHandler(async (req, res) => {
     res.send(await test());
-}))
+}));
 
 server.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-})
+    console.log(`Example app listening at http://localhost:${port}`);
+});
 
 async function test(){
-    var test_query = `query EventSets($eventId: ID!, $page: Int!, $perPage: Int!) {
-        event(id: $eventId) {
-            id
-            name
-            sets(
-                page: $page
-            perPage: $perPage
-            sortType: RECENT
-        ) {
-                pageInfo {
-                    total
-                    totalPages
-                }
-                nodes {
-                    id
-                    displayScore
-                    winnerId
-                    slots {
-                        entrant{
-                            id
-                            name
-                        }
-                        standing{
-                            stats{
-                                score {
-                                    value
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }`;
-    let new_object = {};
-    let sets_counted = [];
-    for (let x=0; x<32; x+=1){
-        const testData = await fetch('https://api.smash.gg/gql/alpha', {
-            method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + api_key,
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify({query: test_query, variables: {"eventId": 99485, "page": x, "perPage": 50}})
-        });
-
-        let result = await testData.json();
-        for(let item of result.data.event.sets.nodes){
-            if(!sets_counted.includes(item.id)){
-                //item.winnerId in new_object ? new_object[item.winnerId] += 1 : new_object[item.winnerId] = 1;
-
-                item.slots[0].entrant.name in new_object ? new_object[item.slots[0].entrant.name] += 1 : new_object[item.slots[0].entrant.name] = 1;
-                item.slots[1].entrant.name in new_object ? new_object[item.slots[1].entrant.name] += 1 : new_object[item.slots[1].entrant.name] = 1;
-                sets_counted.push(item.id);
-            }
-
-        }
-    }
-    console.log(sets_counted);
-    return new_object;
+    // const tourney =  await tourneyImport("ceo-2016");
+    // await insertTournament(tourney);
+    // const events = await event_query.getTournamentEvents(tourney.id);
+    // const event = await event_query.getEvent(events[0].id);
+    // await event_query.insertEvent(events[0].id, tourney.id);
+    // const full_info = Object.assign({}, tourney, {events: events}, event);
+    
+    // const sets = await set_query.setImport(11789);
+    
+    // return sets;
+    const player = await player_query.insertPlayer(123);
+    return player
 }

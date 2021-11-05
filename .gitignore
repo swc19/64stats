@@ -1,5 +1,6 @@
 .env
 node_modules/
 .idea/
-queries.js
+tests/
 package-lock.json
+.vscode/

@@ -1,5 +1,6 @@
 import fetch from 'node-fetch';
 import {Player, api_key} from '../../db.js';
+import { getCountryCode } from '../util.js';
 
 
 export async function getPlayer(player_id) {
@@ -21,7 +22,7 @@ export async function getPlayer(player_id) {
             externalUsername
           }
         }
-      }`
+      }`;
 
     const player_data = await fetch('https://api.smash.gg/gql/alpha', {
         method: 'POST',
@@ -44,6 +45,10 @@ export async function insertPlayer(player_id) {
     }
     // Add player into database
     const player = await getPlayer(player_id);
+
+    player.location.country === "United States" ? player.location.country = "United States of America" : player.location.country;
+    player.location.country = await getCountryCode(player.location.country);
+
     const player_object = {
         player_id: player.id,
         player_tag: player.player.gamerTag,

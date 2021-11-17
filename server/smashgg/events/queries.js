@@ -12,7 +12,7 @@ export async function getTournamentEvents(tournament_id) {
                 name
             }
         }
-    }`
+    }`;
 
     const event = await fetch('https://api.smash.gg/gql/alpha', {
         method: 'POST',
@@ -64,3 +64,12 @@ export async function insertEvent(event_id, tournament_id) {
     return event_insert.toJSON();
 }
 
+//delete an event from the database
+export async function deleteEvent(event_id) {
+    const event = await Event.findOne({
+        where: {
+            event_id: event_id
+        }
+    });
+    await event.destroy();
+}

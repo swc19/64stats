@@ -2,10 +2,10 @@
   "name": "64stats",
   "version": "0.0.1",
   "description": "data aggregation of smash 64 stats",
-  "main": "server/server.js",
-  "type": "module",
+  "main": "./server/server.js",
+  "private": true,
   "scripts": {
-    "start": "nodemon server/server.js"
+    "dev": "nodemon ./server/server.js"
   },
   "repository": {
     "type": "git",
@@ -26,9 +26,15 @@
     "node-fetch": "^3.0.0",
     "pg": "^8.7.1",
     "pg-hstore": "^2.3.4",
-    "sequelize": "^6.7.0"
+    "sequelize": "^6.7.0",
+    "xhr2": "^0.2.1",
+    "next": "12.0.3",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
   },
   "devDependencies": {
+    "eslint": "7",
+    "eslint-config-next": "12.0.3",
     "nodemon": "^2.0.14"
   }
 }

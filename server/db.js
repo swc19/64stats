@@ -43,6 +43,7 @@ const Tournament = sequelize.define('Tournament',{
 }, {
     sequelize,
     createdAt: false,
+    updatedAt: false,
     freezeTableName: true
 });
 
@@ -70,6 +71,7 @@ const Player = sequelize.define('Player', {
 },{
     sequelize,
     createdAt: false,
+    updatedAt: false,
     freezeTableName: true
 });
 
@@ -101,24 +103,24 @@ const Set = sequelize.define('Set', {
     },
     winner_id: {
         type: DataTypes.INTEGER,
-        references: {
-            model: 'Player',
-            key: 'player_id'
-        }
+        // references: {
+        //     model: 'Player',
+        //     key: 'player_id'
+        // }
     },
     entrant_0: {
         type: DataTypes.INTEGER,
-        references: {
-            model: 'Player',
-            key: 'player_id'
-        }
+        // references: {
+        //     model: 'Player',
+        //     key: 'player_id'
+        // }
     },
     entrant_1: {
         type: DataTypes.INTEGER,
-        references: {
-            model: 'Player',
-            key: 'player_id'
-        }
+        // references: {
+        //     model: 'Player',
+        //     key: 'player_id'
+        // }
     },
     entrant_0_score: {
         type: DataTypes.STRING
@@ -129,6 +131,7 @@ const Set = sequelize.define('Set', {
 }, {
     sequelize,
     createdAt: false,
+    updatedAt: false,
     freezeTableName: true
 });
 
@@ -157,7 +160,32 @@ const Event = sequelize.define('Event', {
     }
 }, {
     sequelize,
+    createdAt: false,
+    updatedAt: false,
     freezeTableName: true
 });
 
-export {sequelize, Player, Set, Tournament, Event};
+// Standings type
+const Standings = sequelize.define('Standings', {
+    event_id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+    },
+    tournament_id: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: 'Tournament',
+            key: 'tourney_id'
+        }
+    },
+    placements: {
+        type: DataTypes.JSON
+    }
+}, {
+    sequelize,
+    createdAt: false,
+    updatedAt: false,
+    freezeTableName: true
+});
+
+export {sequelize, Player, Set, Tournament, Event, Standings};

@@ -70,9 +70,13 @@ export async function setImport(event_id) {
         const page = await setData(i);
         page.sets.nodes.forEach(set => {
             // This assumes a singles bracket, hence the [0] in participants. Doubles is not in scope of this project (yet)
-            if(set.slots[0].entrant.participants[0].user === null || set.slots[1].entrant.participants[0].user === null){
-                // Anonymous user, doesn't have a smash.gg id
-                return;
+            if(set.slots[0].entrant.participants[0].user === null){
+                // If anonymous user, there is no id, so set it to -1 to handle later
+                // TODO check winner id case for anon winner
+                set.slots[0].entrant.participants[0].user.id = -1;
+            }
+            if(set.slots[1].entrant.participants[0].user === null){
+                set.slots[1].entrant.participants[0].user.id = -1;
             }
             let set_object = {
                 set_id: set.id,
@@ -124,14 +128,19 @@ export async function setImport(event_id) {
             // else this will violate foreign key constraint
             sets.push(set_object);
         }
-    )};
+    )};    
+    return sets;
+}
+
+export async function insertSet(sets){
+    // parameter sets - an array of set objects
     for(const set of sets){
         // Check if set id is in database
-        const set_exists = await Set.findOne({where: {set_id: set.set_id}});
-        if(!set_exists){
+        const set_unique = await Set.findOne({where: {set_id: set.set_id}});
+        // Realistically, if there's one duplicate set then everything will be a duplicate, but check all to be sure
+        if(!set_unique){
             await Set.create(set);
         }
     }
     return true;
 }
-

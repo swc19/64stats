@@ -39,9 +39,9 @@ export async function getPlayer(player_id) {
 
 export async function insertPlayer(player_id) {
     // Verify uniqueness of user
-    const isUnique = await Player.findOne({where: {player_id: player_id}});
-    if (isUnique) {
-        return "Player exists"
+    const player_unique = await Player.findOne({where: {player_id: player_id}});
+    if(!player_unique) {
+        return;
     }
     // Add player into database
     const player = await getPlayer(player_id);

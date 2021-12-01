@@ -2,31 +2,6 @@ import fetch from 'node-fetch';
 import {Event, api_key} from "../../db.js";
 
 
-//Get events from a tournament
-export async function getTournamentEvents(tournament_id) {
-    const tournament_event_query = 
-    `query TournamentEvents($id: ID!){
-        tournament(id: $id) {
-            events {
-                id
-                name
-            }
-        }
-    }`;
-
-    const event = await fetch('https://api.smash.gg/gql/alpha', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer ' + api_key,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({query: tournament_event_query, variables: {"id": tournament_id}})
-    });
-    const event_json = await event.json();
-    return event_json.data.tournament.events;
-}
-
 // Get event info from an event id
 export async function getEvent(event_id) {
     const event_query = 

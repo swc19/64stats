@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 export function getTourneySlugFromURL(url) {
     // Extract something like "ceo-2016" from https://smash.gg/tournament/ceo-2016/
     // This is over-engineered but it /should/ be foolproof

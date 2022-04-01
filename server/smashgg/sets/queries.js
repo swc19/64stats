@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import {Set, api_key} from '../../db.js';
 
 // Get all sets based on event id

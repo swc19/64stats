@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import {Standings, Event, api_key} from "../../db.js";
 
 // Get standings from an event

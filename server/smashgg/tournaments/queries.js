@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import {Tournament, api_key} from "../../db.js";
 
 export async function tourneyImport(slug){

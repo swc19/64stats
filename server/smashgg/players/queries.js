@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import {Player, api_key} from '../../db.js';
 import { getCountryCode } from '../util.js';
 

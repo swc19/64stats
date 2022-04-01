@@ -3,9 +3,6 @@ import dotenv from 'dotenv';
 
 const {Sequelize, DataTypes} = pkg;
 
-
-
-
 const database = process.env.PG_DB_NAME;
 const password = process.env.PG_DB_PASSWORD;
 const user = process.env.PG_USER;

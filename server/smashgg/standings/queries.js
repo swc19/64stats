@@ -1,8 +1,12 @@
 import fetch from 'node-fetch';
-import {Standings, api_key} from "../../db.js";
+import {Standings, Event, api_key} from "../../db.js";
 
 // Get standings from an event
 export async function getStandings(event_id) {
+  const event = await Event.findOne({where: {event_id: event_id}});
+  if (!event) {
+    throw new Error("Event does not exist");
+  }
     const standings_query = 
     `query EventStandings($eventId: ID!, $page: Int!, $perPage: Int!) {
         event(id: $eventId) {
@@ -60,4 +64,5 @@ export async function getStandings(event_id) {
         tournament_id: first_page.tournament.id,
         placements: standings_obj
     });
+    return true;
 }

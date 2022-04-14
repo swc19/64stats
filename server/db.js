@@ -9,6 +9,7 @@ const database = process.env.PG_DB_NAME;
 const password = process.env.PG_DB_PASSWORD;
 const user = process.env.PG_USER;
 export const api_key = process.env.API_KEY;
+export const path = 'http://localhost:3000';
 
 const sequelize = new Sequelize(database, user, password, {
     dialect: 'postgres',
@@ -38,6 +39,9 @@ const Tournament = sequelize.define('Tournament',{
     },
     tourney_entrants: {
         type: DataTypes.INTEGER,
+    },
+    tourney_slug: {
+        type: DataTypes.STRING,
     }
 }, {
     sequelize,

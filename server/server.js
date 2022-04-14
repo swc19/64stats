@@ -4,16 +4,20 @@ dotenv.config({path: '../.env'});
 import next from 'next';
 import { apiRouter } from './smashgg/routes.js';
 
-
 const port = 3000;
 import {sequelize} from "./db.js";
 
 
-await sequelize.sync({force: true});
+async function sync() {
+    console.log('syncing db');
+    await sequelize.sync({force: false});
+}
+sync();
 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
 const handle = app.getRequestHandler();
+
 
 app.prepare().then(() => {
     const server = express();

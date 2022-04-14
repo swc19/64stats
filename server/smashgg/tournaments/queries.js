@@ -10,6 +10,7 @@ export async function tourneyImport(slug){
           venueAddress
           numAttendees
           startAt
+          slug
         }
       }`
 
@@ -66,7 +67,8 @@ export async function insertTournament(tournament){
         tourney_country: tournament.countryCode,
         tourney_location: tournament.venueAddress,
         tourney_start_time: tournament.startAt*1000,
-        tourney_entrants: tournament.numAttendees
+        tourney_entrants: tournament.numAttendees,
+        tourney_slug: tournament.slug.replace('tournament/', '')
     });
     return tourn.toJSON();
 }

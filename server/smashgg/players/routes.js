@@ -4,6 +4,7 @@ import {Player} from "../../db.js"
 export const router = express.Router();
 router.use(express.json());
 
+
 // Get a player's details
 router.get('/:id', async (req, res, next) => {
     const player = await Player.findByPk(req.params.id);

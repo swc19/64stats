@@ -1,21 +1,10 @@
 import Head from 'next/head'
 import Image from 'next/image'
+import Link from 'next/link'
 import styles from '../styles/Home.module.css'
-import { useState } from 'react';
 
 export default function Home() {
-  const [tourneySlug, setNewTourneySlug] = useState('');
-
-  async function tournamentImport(slug){
-    console.log(slug);
-    const tournament = await fetch("/api/v1/tournament/" + slug, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-    });
-    console.log(tournament.status);
-  }
+  
 
   return (
     <div className={styles.container}>
@@ -34,8 +23,9 @@ export default function Home() {
           Get started by editing{' '}
           <code className={styles.code}>pages/index.js</code>
         </p>
-        <input type="text" name="tournament" placeholder="Enter tournament slug" autoComplete="off" onChange={(e) => setNewTourneySlug(e.target.value)} />
-        <button onClick={() => tournamentImport(tourneySlug)}>Import Tournament</button>
+
+
+        <Link href="/admin/data-loader"><h2>Data Loader</h2></Link>
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
             <h2>Documentation &rarr;</h2>

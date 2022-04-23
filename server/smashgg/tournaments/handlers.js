@@ -1,5 +1,6 @@
 import {Tournament} from '../../db.js';
 import * as Query from './queries.js';
+import * as EventQuery from '../events/queries.js';
 
 export async function handlePost(req, res) {
     const tournament = await Query.tourneyImport(req.params.slug);

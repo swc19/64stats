@@ -23,6 +23,7 @@ export async function getStandings(event_id) {
               placement
               entrant {
                 participants{
+                  gamerTag
                   user{
                     id
                   }
@@ -48,14 +49,22 @@ export async function getStandings(event_id) {
     const first_page = await standingsData(1);
     const num_of_pages = first_page.standings.pageInfo.totalPages;
 
+
     let standings_obj = {};
+    let n = 1;
     for(let i = 1; i < num_of_pages; i++){
         const page = await standingsData(i);
         page.standings.nodes.forEach(function(standings){
-            if(standings.entrant.participants[0].user === null){
-                return;
+            let user_id = n*-1;
+            if(standings.entrant.participants[0].user !== null){
+                user_id = standings.entrant.participants[0].user.id;
             }
-            standings_obj[standings.entrant.participants[0].user.id] = standings.placement;
+            let mini_obj = {}
+            mini_obj.placement = standings.placement;
+            mini_obj.player_id = user_id;
+            mini_obj.player_tag = standings.entrant.participants[0].gamerTag;
+            standings_obj[user_id] = mini_obj;
+            n++;
         });
     }
     await Standings.create({

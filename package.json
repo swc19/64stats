@@ -5,7 +5,7 @@
   "main": "./server/server.js",
   "private": true,
   "scripts": {
-    "dev": "nodemon ./server/server.js"
+    "dev": "nodemon ./server/server.js --config nodemon.json"
   },
   "repository": {
     "type": "git",

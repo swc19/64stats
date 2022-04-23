@@ -28,6 +28,11 @@ export async function getEvent(event_id) {
 // Insert a set into the database using event and tournament ids
 export async function insertEvent(event_id, tournament_id) {
     const event = await getEvent(event_id);
+    //verify uniqueness
+    const existing_event = await Event.findOne({where: {event_id: event_id}});
+    if (existing_event) {
+        return false;
+    }
     const event_insert = await Event.create({
         event_id: event_id,
         tourney_id: tournament_id,

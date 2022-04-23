@@ -139,6 +139,7 @@ const Set = sequelize.define('Set', {
 });
 
 const Event = sequelize.define('Event', {
+    //TODO: singles/doubles designator [out of scope for now]
     event_id: {
         type: DataTypes.INTEGER,
         primaryKey: true,

@@ -24,6 +24,7 @@ next.config.js
 *.pem
 .vscode/
 .idea/
+nodemon.json
 
 # debug
 npm-debug.log*

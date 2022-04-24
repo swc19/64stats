@@ -49,10 +49,9 @@ export async function getStandings(event_id) {
     const first_page = await standingsData(1);
     const num_of_pages = first_page.standings.pageInfo.totalPages;
 
-
     let standings_obj = {};
     let n = 1;
-    for(let i = 1; i < num_of_pages; i++){
+    for(let i = 1; i <= num_of_pages; i++){
         const page = await standingsData(i);
         page.standings.nodes.forEach(function(standings){
             let user_id = n*-1;

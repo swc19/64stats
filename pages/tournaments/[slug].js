@@ -27,22 +27,22 @@ export default function Tournament({tournament, events, singles_tourney, singles
                 ? <><div>Events Imported: {singles_tourney.event_name}<br />
                     {singles_standings ? Object.entries(singles_standings).sort((a, b) => a[1].placement - b[1].placement).map(e => {
                         return (
-                            <div>
-                                <p key={e[0]}>{e[1].player_tag}, {e[1].placement}, {e[1].player_id}</p>
+                            <div key={e[0]}>
+                                <p>{e[1].player_tag}, {e[1].placement}, {e[1].player_id}</p>
                             </div>
                         );
                     }) : null} </div><br /></>
-             : <p>No Event Found</p>}
+             : <p>No Event Imported</p>}
             
 
             Events:
             <ul>
-                {events.map(event => {
+                {events.filter(event => event.name.includes("64") && event.name.includes("Singles")).map(event => {
                     return (
                         <li key={event.id}>
                             {event.id} - {event.name} <button onClick={() => eventImport(event.id, tournament.tourney_id)}>Import This Event</button>
-                        </li>
-                    )
+                        </li>                        
+                        )
                 })}
             </ul>
         </div>

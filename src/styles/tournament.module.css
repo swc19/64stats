@@ -1,0 +1,33 @@
+.main{
+    position:relative;
+    padding-left: 2em;
+}
+
+.standings{
+    flex: 0 1 auto;
+    align-items: flex-start;
+    justify-content: flex-start;
+    align-self: flex-start;
+}
+
+.standing-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    text-align: left;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 65%;
+    margin: 0 auto;
+    /* outline: auto; */
+}
+
+.tournament-info {
+    position: relative;
+    width: 25%;
+}
+
+.accordion{
+    width: 100%;
+}

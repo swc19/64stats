@@ -118,12 +118,18 @@ const Set = sequelize.define('Set', {
         //     key: 'player_id'
         // }
     },
+    entrant_0_tag: {
+        type: DataTypes.STRING
+    },
     entrant_1: {
         type: DataTypes.INTEGER,
         // references: {
         //     model: 'Player',
         //     key: 'player_id'
         // }
+    },
+    entrant_1_tag: {
+        type: DataTypes.STRING
     },
     entrant_0_score: {
         type: DataTypes.STRING

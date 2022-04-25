@@ -3,6 +3,7 @@ import * as StandingsQuery from '../standings/queries.js';
 export async function handlePost(req, res) {
     const response = await Query.insertEvent(req.params.id, req.params.tourneyid);
     const standings = await StandingsQuery.getStandings(req.params.id);
+    console.log("Standings response " +  standings);
     if(response){
         if(standings){
             res.status(200).send(response);

@@ -2,9 +2,9 @@ import {Standings, Event, api_key} from "../../db.js";
 
 // Get standings from an event
 export async function getStandings(event_id) {
-  const event = await Event.findOne({where: {event_id: event_id}});
-  if (!event) {
-    throw new Error("Event does not exist");
+  const standings = await Standings.findOne({where: {event_id: event_id}});
+  if (standings) {
+    return false;
   }
     const standings_query = 
     `query EventStandings($eventId: ID!, $page: Int!, $perPage: Int!) {

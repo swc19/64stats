@@ -1,6 +1,7 @@
 .main{
     position:relative;
     padding-left: 2em;
+    font-family: Roboto, sans-serif;
 }
 
 .standings{
@@ -20,7 +21,7 @@
     flex-wrap: wrap;
     width: 65%;
     margin: 0 auto;
-    /* outline: auto; */
+    outline: auto;
 }
 
 .tournament-info {
@@ -30,4 +31,14 @@
 
 .accordion{
     width: 100%;
+}
+
+.set-indicator-wrapper{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: right;
+    align-items: center;
+    align-self: center;
+    text-align: center;
 }

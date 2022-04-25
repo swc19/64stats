@@ -1,0 +1,6 @@
+.set-indicator{
+    display:flex;
+    height: 2em;
+    width: 4em;
+    justify-content: center;
+}

@@ -1,6 +1,5 @@
 import {path} from '../../server/db.js';
 import React from 'react';
-import { password } from 'pg/lib/defaults';
 
 export default function Tournament({tournament, events, singles_tourney, singles_standings}){
     async function eventImport(id, tourney_id){
@@ -10,6 +9,7 @@ export default function Tournament({tournament, events, singles_tourney, singles
             "Content-Type": "application/json"
             },
         });
+        window.location.reload();
         console.log(event.status);  
     }
 
@@ -23,6 +23,17 @@ export default function Tournament({tournament, events, singles_tourney, singles
             <p>{tournament.tourney_entrants}</p>
             <p>{tournament.tourney_slug}</p>
             <p>{tournament.tourney_id}</p>
+            Events:
+            <ul>
+                {events.filter(event => event.name.includes("64") && event.name.includes("Singles")).map(event => {
+                    return (
+                        <li key={event.id}>
+                            {event.id} - {event.name} <button onClick={() => eventImport(event.id, tournament.tourney_id)}>Import This Event</button>
+                        </li>                        
+                        )
+                })}
+            </ul>
+
             {singles_tourney 
                 ? <><div>Events Imported: {singles_tourney.event_name}<br />
                     {singles_standings ? Object.entries(singles_standings).sort((a, b) => a[1].placement - b[1].placement).map(e => {
@@ -35,16 +46,7 @@ export default function Tournament({tournament, events, singles_tourney, singles
              : <p>No Event Imported</p>}
             
 
-            Events:
-            <ul>
-                {events.filter(event => event.name.includes("64") && event.name.includes("Singles")).map(event => {
-                    return (
-                        <li key={event.id}>
-                            {event.id} - {event.name} <button onClick={() => eventImport(event.id, tournament.tourney_id)}>Import This Event</button>
-                        </li>                        
-                        )
-                })}
-            </ul>
+           
         </div>
     )
 }

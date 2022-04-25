@@ -3,6 +3,7 @@ import * as Query from './queries.js';
 import * as EventQuery from '../events/queries.js';
 
 export async function handlePost(req, res) {
+    // Handle full url in the future with the util.js function
     const tournament = await Query.tourneyImport(req.params.slug);
     if (tournament) {
         const response = await Query.insertTournament(tournament);

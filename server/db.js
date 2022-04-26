@@ -84,7 +84,7 @@ const Set = sequelize.define('Set', {
         primaryKey: true,
         allowNull: false
     },
-    set_start_time: {
+    set_completed_at: {
         type: DataTypes.DATE,
     },
     set_bracket_location: {
@@ -103,6 +103,9 @@ const Set = sequelize.define('Set', {
             model: 'Event',
             key: 'event_id'
         }
+    },
+    set_lPlacement: {
+        type: DataTypes.INTEGER
     },
     winner_id: {
         type: DataTypes.INTEGER,

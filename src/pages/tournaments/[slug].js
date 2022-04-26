@@ -7,6 +7,26 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Tournament({tournament, events, singles_tourney, singles_standings, sets}){
 
+    const bracketEnum = {
+        "Winners Round 1": 0,
+        "Winners Round 2": 1,
+        "Winners Round 3": 2,
+        "Losers Round 1": 3,
+        "Winners Quarter-Final": 4,
+        "Losers Round 2": 5,
+        "Winners Semi-Final": 6,
+        "Losers Round 3": 7,
+        "Losers Round 4": 8,
+        "Losers Quarter-Final": 9,
+        "Winners Final": 10,
+        "Losers Semi-Final": 11,
+        "Losers Final": 12,
+        "Grand Final": 13
+    }
+
+
+
+
     async function eventImport(id, tourney_id){
         const event = await fetch(`/api/v1/event/${id}/${tourney_id}`, {
             method: "POST",
@@ -22,10 +42,8 @@ export default function Tournament({tournament, events, singles_tourney, singles
         });
 
         window.location.reload();
-        console.log("Events: " + event.status);  
-        console.log("Sets: " + set.status);
     }
-    
+
     // TODO: make this an api call
     function getWinLoss(set_data, player_id){
         let wins = 0;
@@ -66,7 +84,23 @@ export default function Tournament({tournament, events, singles_tourney, singles
             setStandings(Object.values(singles_standings).sort((a, b) => a.placement - b.placement).slice(0, resultsPerPage));
         }}, [active]);
     
-    
+
+    //this sort is really awkward
+    function setSort(set_array){
+        let pools = [];
+        let bracket = [];
+        //Pools matches
+        set_array.filter(set => set.set_lPlacement === null).forEach(set => {
+            pools.push(set);
+        });
+        pools.sort((a, b) => a.set_completed_at - b.set_completed_at);
+        set_array.filter(set => set.set_lPlacement !== null).forEach(set => {
+            bracket.push(set);
+        });
+        bracket.sort((a, b) => bracketEnum[a.set_bracket_location] < bracketEnum[b.set_bracket_location]);
+        console.log(bracket);
+        return bracket.concat(pools);
+    }
     
     return(
         <div className={styles['main']}>
@@ -99,10 +133,8 @@ export default function Tournament({tournament, events, singles_tourney, singles
                                         <Accordion.Item eventKey={player.player_id}>
                                             <Accordion.Header>{player.placement}{nth(player.placement)} -- {player.player_tag}</Accordion.Header>
                                             <Accordion.Body>
-                                                {/* for each set a player played, make a new set indicator */}
                                                 <div className={styles['set-indicator-wrapper']}>
-                                                    {sets.filter(set => set.entrant_0 === player.player_id || set.entrant_1 === player.player_id).sort((a, b) =>
-                                                    a.set_id > b.set_id).map(set => {
+                                                    {setSort(sets.filter(set => set.entrant_0 === player.player_id || set.entrant_1 === player.player_id)).map(set => {
                                                         return (
                                                             <SetIndicator key={set.set_id} player={player.player_id} set={set} />
                                                         )

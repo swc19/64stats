@@ -23,7 +23,8 @@ export async function setImport(event_id) {
                     id
                     displayScore
                     winnerId
-                    startAt
+                    completedAt
+                    lPlacement
                     fullRoundText
                     slots {
                         entrant{
@@ -82,8 +83,9 @@ export async function setImport(event_id) {
             
             let set_object = {
                 set_id: set.id,
-                set_start_time: set.startAt*1000,
+                set_completed_at: set.completedAt*1000,
                 set_bracket_location: set.fullRoundText,
+                set_lPlacement: set.lPlacement,
                 tourney_id: first_page.tournament.id,
                 event_id: event_id,
                 winner_id: set.winnerId,

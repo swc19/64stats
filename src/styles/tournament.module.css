@@ -35,7 +35,7 @@
 
 .set-indicator-wrapper{
     display: flex;
-    flex-direction: row;
+    flex-direction: row-reverse;
     flex-wrap: wrap;
     justify-content: right;
     align-items: center;

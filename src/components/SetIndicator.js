@@ -20,9 +20,9 @@ export default function SetIndicator(props) {
       
     function setColor(status){
         if (status === "W"){
-            return 'green'
+            return 'lightgreen'
         } else if (status === "L"){
-            return 'red'
+            return 'lightcoral'
         } else {
             return 'grey'
         }

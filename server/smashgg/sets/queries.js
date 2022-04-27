@@ -1,3 +1,6 @@
+import pkg from 'sequelize';
+const { Op } = pkg;
+import { sequelize } from '../../db.js';
 import {Set, api_key} from '../../db.js';
 
 // Get all sets based on event id
@@ -72,6 +75,7 @@ export async function setImport(event_id) {
             // This assumes a singles bracket, hence the [0] in participants. Doubles is not in scope of this project (yet)
             let user_id_entrant_0 = -1;
             let user_id_entrant_1 = -1;
+            let winner_tag = '';
             if(set.slots[0].entrant.participants[0].user !== null){
                 // If anonymous user, there is no id, so set it to -1 to handle later
                 // TODO check winner id case for anon winner
@@ -80,7 +84,6 @@ export async function setImport(event_id) {
             if(set.slots[1].entrant.participants[0].user !== null){
                 user_id_entrant_1 = set.slots[1].entrant.participants[0].user.id;
             }
-            
             let set_object = {
                 set_id: set.id,
                 set_completed_at: set.completedAt*1000,
@@ -89,6 +92,7 @@ export async function setImport(event_id) {
                 tourney_id: first_page.tournament.id,
                 event_id: event_id,
                 winner_id: set.winnerId,
+                winner_tag: winner_tag,
                 entrant_0: user_id_entrant_0,
                 entrant_0_tag: set.slots[0].entrant.participants[0].gamerTag,
                 entrant_1: user_id_entrant_1,
@@ -130,6 +134,13 @@ export async function setImport(event_id) {
                 set_object.winner_id = set_object.entrant_1;
             }
 
+            if(set_object.winner_id === set_object.entrant_0){
+                set_object.winner_tag = set_object.entrant_0_tag;
+            }
+            if(set_object.winner_id === set_object.entrant_1){
+                set_object.winner_tag = set_object.entrant_1_tag;
+            }
+
             // TODO check if player exists, if not add them
             // else this will violate foreign key constraint
             sets.push(set_object);
@@ -149,4 +160,113 @@ export async function insertSets(sets){
         }
     }
     return true;
+}
+
+export async function getMostGamesWon(event_id){
+    const players = {};
+    const when_entrant_0 = await Set.findAll({
+        where:{
+            event_id: event_id,
+            entrant_0_score: {
+                [Op.notRegexp]: '^[DQ|L|W]',   
+            }
+        },
+        attributes: ['entrant_0_tag', [sequelize.fn('SUM', sequelize.cast(sequelize.col('entrant_0_score'), 'int')), 'count']],
+        group: ['entrant_0_tag'],
+        order: [[sequelize.literal('count'), 'DESC']],
+    });
+    when_entrant_0.forEach(player => {
+        player = player.dataValues;
+        if(parseInt(player.count)){
+            players[player.entrant_0_tag] = parseInt(player.count);
+        } else {
+            players[player.entrant_0_tag] = 0;
+        }
+    });
+    const when_entrant_1 = await Set.findAll({
+        where:{
+            event_id: event_id,
+            entrant_1_score: {
+                [Op.notRegexp]: '^[DQ|L|W]',
+            }
+        },
+        attributes: ['entrant_1_tag', [sequelize.fn('SUM', sequelize.cast(sequelize.col('entrant_1_score'), 'int')), 'count']],
+        group: ['entrant_1_tag'],
+        order: [[sequelize.literal('count'), 'DESC']],
+    });
+    when_entrant_1.forEach(player => {
+        player = player.dataValues;
+        if(players[player.entrant_1_tag]){
+            if(parseInt(player.count)){
+                players[player.entrant_1_tag] += parseInt(player.count);
+            }
+        }
+        else{
+            players[player.entrant_1_tag] = parseInt(player.count) ? parseInt(player.count) : 0;
+        }
+    });
+    const most_games_won = Object.entries(players).sort((a, b) => b[1] - a[1])[0][1];
+    const all_most_games_won = Object.entries(players).filter(player => player[1] === most_games_won);
+    return(all_most_games_won);
+}
+
+export async function getMostSetWins(event_id){
+    const players = {};
+    const win_list = await Set.findAll({
+        where:{
+            event_id: event_id,
+        },
+        attributes: ['winner_tag', [sequelize.fn('COUNT', sequelize.col('winner_tag')), 'count']],
+        group: ['winner_tag'],
+        order: [[sequelize.literal('count'), 'DESC']],
+    });
+    win_list.forEach(player => {
+        player = player.dataValues;
+        if(parseInt(player.count)){
+            players[player.winner_tag] = parseInt(player.count);
+        } else {
+            players[player.winner_tag] = '';
+        }
+    });
+    const most_sets_won = Object.entries(players).sort((a, b) => b[1] - a[1])[0][1];
+    const all_most_sets_won = Object.entries(players).filter(player => player[1] === most_sets_won);
+    return(all_most_sets_won);
+}
+
+export async function getMostSetsPlayed(event_id){
+    const players = {}
+    const when_entrant_0 = await Set.findAll({
+        where:{
+            event_id: event_id
+        },
+        attributes: ['entrant_0_tag', [sequelize.fn('COUNT', sequelize.col('set_id')), 'count']],
+        group: ['entrant_0_tag'],
+        order: [[sequelize.literal('count'), 'DESC']],
+    });
+    when_entrant_0.forEach(player => {
+        player = player.dataValues;
+        players[player.entrant_0_tag] = parseInt(player.count);
+    });
+    const when_entrant_1 = await Set.findAll({
+        where:{
+            event_id: event_id
+        },
+        attributes: ['entrant_1_tag', [sequelize.fn('COUNT', sequelize.col('set_id')), 'count']],
+        group: ['entrant_1_tag'],
+        order: [[sequelize.literal('count'), 'DESC']],
+    });
+    when_entrant_1.forEach(player => {
+        player = player.dataValues;
+        if(players[player.entrant_1_tag]){
+            if(parseInt(player.count)){
+                players[player.entrant_1_tag] += parseInt(player.count);
+            }
+        }
+        else{
+            players[player.entrant_1_tag] = parseInt(player.count);
+        }
+    });
+    const most_sets_played = Object.entries(players).sort((a, b) => b[1] - a[1])[0][1];
+    const all_most_sets_played = Object.entries(players).filter(player => player[1] === most_sets_played);
+    return(all_most_sets_played);
 }

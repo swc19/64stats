@@ -114,6 +114,9 @@ const Set = sequelize.define('Set', {
         //     key: 'player_id'
         // }
     },
+    winner_tag: {
+        type: DataTypes.STRING
+    },
     entrant_0: {
         type: DataTypes.INTEGER,
         // references: {

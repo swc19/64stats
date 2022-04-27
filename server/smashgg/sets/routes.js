@@ -1,6 +1,7 @@
 import express from 'express';
 import {Set} from "../../db.js"
 import { handlePost } from './handlers.js';
+import * as Query from './queries.js';
 
 export const router = express.Router();
 router.use(express.json());
@@ -11,6 +12,20 @@ router.get('/:id', async (req, res, next) => {
     res.json(set);
 });
 
+router.get('/event/:id/mostGameWins', async (req, res, next) => {
+    const player = await Query.getMostGamesWon(req.params.id);
+    res.json(player);
+}) 
+
+router.get('/event/:id/mostSetWins', async (req, res, next) => {
+    const player = await Query.getMostSetWins(req.params.id);
+    res.json(player);
+}) 
+
+router.get('/event/:id/mostSetPlays', async (req, res, next) => {
+    const player = await Query.getMostSetsPlayed(req.params.id);
+    res.json(player);
+    })
 
 // Get all sets from an event
 router.use('/event/:id', async (req, res, next) => {
@@ -26,5 +41,7 @@ router.use('/event/:id', async (req, res, next) => {
         res.json(sets);
     }
 })
+
+
 
 // Insert a set into a database

@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 export default function SetIndicator(props) {
-    const player_slot = props.player === props.set.entrant_0? 0 : 1;
+    const player_slot = props.player === props.set.entrant_0 ? 0 : 1;
     const player_score = player_slot === 0 ? props.set.entrant_0_score : props.set.entrant_1_score;
 
     function getWin(set, player){

@@ -3,9 +3,10 @@ import React, { useEffect } from 'react';
 import styles from '../../styles/tournament.module.css';
 import {Accordion, Pagination} from 'react-bootstrap';
 import SetIndicator from '../../components/SetIndicator.js';
+import TourneyFacts from '../../components/TourneyFacts.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export default function Tournament({tournament, events, singles_tourney, singles_standings, sets}){
+export default function Tournament({tournament, events, singles_tourney, singles_standings, sets, facts}){
 
     const bracketEnum = {
         "Winners Round 1": 0,
@@ -98,7 +99,6 @@ export default function Tournament({tournament, events, singles_tourney, singles
             bracket.push(set);
         });
         bracket.sort((a, b) => bracketEnum[a.set_bracket_location] < bracketEnum[b.set_bracket_location]);
-        console.log(bracket);
         return bracket.concat(pools);
     }
     
@@ -112,6 +112,10 @@ export default function Tournament({tournament, events, singles_tourney, singles
                 <p>{tournament.tourney_slug}</p>
                 <p>{tournament.tourney_id}</p>
             </div>
+            {singles_tourney && sets ? 
+                <div className={styles['fun-facts']}>
+                    <TourneyFacts data={facts}/>
+                </div> : null}
             Events:
             <ul>
                 {events.filter(event => event.name.includes("64") && event.name.includes("Singles")).map(event => {
@@ -126,6 +130,7 @@ export default function Tournament({tournament, events, singles_tourney, singles
                 {singles_tourney 
                     ? <><div>Events Imported: {singles_tourney.event_name} - {singles_tourney.event_entrants} Entrants</div><br />
                         <div className={styles['standing-wrapper']}>
+                            {/* player standing component? */}
                             <Accordion defaultActiveKey="0" className={styles['accordion']} alwaysOpen>
                             {singles_standings ? standings.map(player => {
                                 return (
@@ -189,20 +194,33 @@ export async function getStaticProps({params}){
     const singles_data = await fetch (`${path}/api/v1/tournament/${id}/getSinglesEvents`).then(res => res.json());
     let singles_standings_data = null;
     let singles_tourney_sets = null;
+    let facts = null;
     if(singles_data !== null){
         const singles_id = singles_data.event_id;
         singles_standings_data = await fetch(`${path}/api/v1/standings/${singles_id}`).then(res => res.json());
         singles_tourney_sets = await fetch (`${path}/api/v1/set/event/${singles_id}`).then(res => res.json());
+        facts = await makeFactsObject(singles_id);
     } else {}
     
-    
+    async function makeFactsObject(singles_id){
+        const facts = {};
+        const most_win_data = await fetch(`${path}/api/v1/set/event/${singles_id}/mostGameWins`).then(res => res.json());
+        facts['most_wins'] = most_win_data;
+        const most_set_wins_data = await fetch(`${path}/api/v1/set/event/${singles_id}/mostSetWins`).then(res => res.json());
+        facts['most_set_wins'] = most_set_wins_data;
+        const most_set_played_data = await fetch(`${path}/api/v1/set/event/${singles_id}/mostSetPlays`).then(res => res.json());
+        facts['most_set_plays'] = most_set_played_data;
+        return facts;
+    }
+
     return{
         props: {
             tournament: tournament_data,
             events: event_data,
             singles_tourney: singles_data ? singles_data : null,
             singles_standings: singles_standings_data ? singles_standings_data.placements : null,
-            sets: singles_tourney_sets ? singles_tourney_sets : null
+            sets: singles_tourney_sets ? singles_tourney_sets : null,
+            facts: facts ? facts : null
         }
     }
 }

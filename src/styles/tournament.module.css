@@ -1,36 +1,77 @@
 .main{
     position:relative;
-    padding-left: 2em;
+    width:100%;
+    min-height:100vh;
     font-family: Roboto, sans-serif;
+    background-color: darkgrey;
+
+}
+
+.sidebar{
+    position: fixed;
+    width: 450px;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: lightgray;
+}
+
+.tournament-info{
+    position: relative;
+    padding: 5%;
+}
+
+.standings-container{
+    font-style: red;
+    position: relative;
+    margin-left:450px;
+    top:0;
 }
 
 .standings{
-    flex: 0 1 auto;
-    align-items: flex-start;
-    justify-content: flex-start;
-    align-self: flex-start;
-}
-
-.standing-wrapper{
     display: flex;
-    justify-content: center;
+    justify-content: top;
     align-items: center;
-    align-self: center;
+    align-self: top;
     text-align: left;
     flex-direction: column;
     flex-wrap: wrap;
-    width: 65%;
+    width: 80%;
+    height: 100%;
     margin: 0 auto;
-    outline: auto;
-}
-
-.tournament-info {
-    position: relative;
-    width: 25%;
+    outline: 2px solid black;
 }
 
 .accordion{
     width: 100%;
+}
+
+.accordion-header{
+    color:black;
+}
+.accordion-button{
+    outline:2px solid black;
+}
+.accordion-button:not(.collapsed){
+    background-color: rgba(36, 255, 237, 0.226);
+}
+.accordion div:nth-child(odd) > div > button{
+    background-color: rgba(36, 255, 237, 0.326);
+}
+.accordion-button:focus{
+    box-shadow:none;
+}
+.accordion-item{
+    background-color: lightgrey;
+}
+
+.pagination{
+    z-index: -1;
+    margin-top: 1px;
+    outline: 1px solid black;
+}
+.pagination li{
+    border: 1px solid black;
 }
 
 .set-indicator-wrapper{
@@ -41,4 +82,13 @@
     align-items: center;
     align-self: center;
     text-align: center;
+}
+
+.search-bar-container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.pagination{
+    flex-wrap: wrap;
 }

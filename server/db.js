@@ -204,4 +204,8 @@ const Standings = sequelize.define('Standings', {
     freezeTableName: true
 });
 
+Set.belongsTo(Tournament, {foreignKey: 'tourney_id'});
+Event.belongsTo(Tournament, {foreignKey: 'tourney_id'});
+Standings.belongsTo(Tournament, {foreignKey: 'tourney_id'});
+
 export {sequelize, Player, Set, Tournament, Event, Standings};

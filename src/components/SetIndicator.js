@@ -1,6 +1,5 @@
 import styles from '../styles/setindicator.module.css';
 import {Popover, OverlayTrigger} from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 export default function SetIndicator(props) {

@@ -1,7 +1,11 @@
 import {path} from '../../server/db.js';
+import React, {useEffect} from 'react';
+import Head from 'next/head';
 
 export default function Player({player}){
-    return;
+    return(
+        <><Head><title>{player.player_tag}</title></Head></>
+    );
 }
 
 export async function getStaticPaths(){

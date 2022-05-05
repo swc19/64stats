@@ -1,7 +1,4 @@
-
-
 export default function TourneyFacts(props){
-
     return(
         <div>
             <h2>Tourney Facts</h2>
@@ -18,4 +15,3 @@ export default function TourneyFacts(props){
     )
 
 }
-

@@ -29,7 +29,7 @@ app.prepare().then(() => {
     }));
 
     server.listen(port, () => {
-        console.log(`Example app listening at http://localhost:${port}`);
+        console.log(`64stats running at http://localhost:${port}`);
     });
 
     

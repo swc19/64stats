@@ -106,6 +106,9 @@ export default function Tournament({tournament, events, singles_tourney, singles
             /* update number of pagination pages based on filtered standings */
             let filtered_pages = getPages(searched_standings);
             setPages(filtered_pages);
+            if(active > filtered_pages.length){
+                setActive(1);
+            }
         } else {
             setPages(getPages(singles_standings));
             setStandings(Object.values(singles_standings).sort((a, b) => a.placement - b.placement).slice(firstIndex, lastIndex));

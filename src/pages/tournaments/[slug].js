@@ -48,11 +48,11 @@ export default function Tournament({tournament, events, singles_tourney, singles
     }
 
     // TODO: make this an api call
-    function getWinLoss(set_data, player_id){
+    function getWinLoss(set_data, player_tag){
         let wins = 0;
         let total = 0;
-        set_data.filter(set => set.entrant_0 === player_id || set.entrant_1 === player_id).forEach(set => {
-            if(set.winner_id === player_id){
+        set_data.filter(set => set.entrant_0_tag === player_tag || set.entrant_1_tag === player_tag).forEach(set => {
+            if(set.winner_tag === player_tag){
                 wins++;
             }
             total++;
@@ -100,18 +100,20 @@ export default function Tournament({tournament, events, singles_tourney, singles
     /* Filter standings by player name */
     const [playerName, setPlayerName] = React.useState('');
     useEffect(() => {
-        if (playerName) {
-            const searched_standings = Object.values(singles_standings).sort((a, b) => a.placement - b.placement).filter(player => player.player_tag.toLowerCase().includes(playerName.toLowerCase()))
-            setStandings(searched_standings.slice(firstIndex, lastIndex));
-            /* update number of pagination pages based on filtered standings */
-            let filtered_pages = getPages(searched_standings);
-            setPages(filtered_pages);
-            if(active > filtered_pages.length){
-                setActive(1);
+        if(singles_standings){
+            if (playerName) {
+                const searched_standings = Object.values(singles_standings).sort((a, b) => a.placement - b.placement).filter(player => player.player_tag.toLowerCase().includes(playerName.toLowerCase()))
+                setStandings(searched_standings.slice(firstIndex, lastIndex));
+                /* update number of pagination pages based on filtered standings */
+                let filtered_pages = getPages(searched_standings);
+                setPages(filtered_pages);
+                if(active > filtered_pages.length){
+                    setActive(1);
+                }
+            } else {
+                setPages(getPages(singles_standings));
+                setStandings(Object.values(singles_standings).sort((a, b) => a.placement - b.placement).slice(firstIndex, lastIndex));
             }
-        } else {
-            setPages(getPages(singles_standings));
-            setStandings(Object.values(singles_standings).sort((a, b) => a.placement - b.placement).slice(firstIndex, lastIndex));
         }
     }, [playerName, firstIndex, lastIndex]);
 
@@ -181,14 +183,14 @@ export default function Tournament({tournament, events, singles_tourney, singles
                                                 </Accordion.Button>
                                                 <Accordion.Body>
                                                     <div className={styles['set-indicator-wrapper']}>
-                                                        {setSort(sets.filter(set => set.entrant_0 === player.player_id || set.entrant_1 === player.player_id)).map(set => {
+                                                        {setSort(sets.filter(set => set.entrant_0_tag === player.player_tag || set.entrant_1_tag === player.player_tag)).map(set => {
                                                             return (
-                                                                <SetIndicator key={set.set_id} player={player.player_id} set={set} />
+                                                                <SetIndicator key={set.set_id} player={player} set={set} />
                                                             );
                                                         })}
                                                     </div>
                                                     {player.player_tag} got {player.placement}{nth(player.placement)} in {singles_tourney.event_name} at {tournament.tourney_name}.
-                                                    They went {getWinLoss(sets, player.player_id)}.
+                                                    They went {getWinLoss(sets, player.player_tag)}.
                                                 </Accordion.Body>
                                             </Accordion.Item>
                                         </div>

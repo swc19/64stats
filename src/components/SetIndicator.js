@@ -3,14 +3,14 @@ import {Popover, OverlayTrigger} from 'react-bootstrap';
 
 
 export default function SetIndicator(props) {
-    const player_slot = props.player === props.set.entrant_0 ? 0 : 1;
+    const player_slot = props.player.player_tag === props.set.entrant_0_tag ? 0 : 1;
     const player_score = player_slot === 0 ? props.set.entrant_0_score : props.set.entrant_1_score;
 
     function getWin(set, player){
         if(player_score === "DQ"){
             return 'DQ';
         }
-        if(player === set.winner_id){  
+        if(player.player_tag === set.winner_tag){  
             return 'W';
         } else {
             return 'L';

@@ -140,7 +140,17 @@ export async function setImport(event_id) {
             if(set_object.winner_id === set_object.entrant_1){
                 set_object.winner_tag = set_object.entrant_1_tag;
             }
+            if(set_object.entrant_0 === -1 && set_object.entrant_1 === -1){
 
+                if(set_object.entrant_0_score === "W" || set_object.entrant_1_score === "DQ"){
+                    set_object.winner_tag = set_object.entrant_0_tag;
+                }
+                if(set_object.entrant_1_score === "W" || set_object.entrant_0_score === "DQ"){
+                    set_object.winner_tag = set_object.entrant_1_tag;
+                }
+            }
+            if(set_object.entrant_0_tag === "Patty-Wagon" || set_object.entrant_1_tag === "Patty-Wagon"){
+                console.log(set_object)}
             // TODO check if player exists, if not add them
             // else this will violate foreign key constraint
             sets.push(set_object);

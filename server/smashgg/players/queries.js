@@ -3,7 +3,7 @@ import { getCountryCode } from '../util.js';
 
 
 export async function getPlayer(player_id) {
-    // Get the User from smash.gg
+    // Get the User from start.gg
     // User is the highest "level" of data, as opposed to participant or entrant
     const player_query = 
     `query User($playerId:ID!) {
@@ -23,7 +23,7 @@ export async function getPlayer(player_id) {
         }
       }`;
 
-    const player_data = await fetch('https://api.smash.gg/gql/alpha', {
+    const player_data = await fetch('https://api.start.gg/gql/alpha', {
         method: 'POST',
         headers: {
             'Authorization': 'Bearer ' + api_key,

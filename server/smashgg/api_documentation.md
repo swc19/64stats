@@ -1,6 +1,6 @@
 # Internal API Documentation
 
-The authenticated GET requests are due to smash.gg's API rate limits, as those requests utilize the API instead of the internal database.
+The authenticated GET requests are due to start.gg's API rate limits, as those requests utilize the API instead of the internal database.
 
 ## Events
 ---

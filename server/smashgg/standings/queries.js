@@ -34,7 +34,7 @@ export async function getStandings(event_id) {
         }
       }`;
       const standingsData = async function(pages){
-        const data = await fetch('https://api.smash.gg/gql/alpha', {
+        const data = await fetch('https://api.start.gg/gql/alpha', {
         method: 'POST',
         headers: {
             'Authorization': 'Bearer ' + api_key,

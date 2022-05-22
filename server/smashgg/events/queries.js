@@ -12,7 +12,7 @@ export async function getEvent(event_id) {
         }
     }`
 
-    const event = await fetch('https://api.smash.gg/gql/alpha', {
+    const event = await fetch('https://api.start.gg/gql/alpha', {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + api_key,

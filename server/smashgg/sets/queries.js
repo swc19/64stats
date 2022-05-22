@@ -55,7 +55,7 @@ export async function setImport(event_id) {
 
     let sets = [];
     const setData = async function(pages){
-        const data = await fetch('https://api.smash.gg/gql/alpha', {
+        const data = await fetch('https://api.start.gg/gql/alpha', {
         method: 'POST',
         headers: {
             'Authorization': 'Bearer ' + api_key,

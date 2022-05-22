@@ -14,7 +14,7 @@ export async function tourneyImport(slug){
         }
       }`
 
-    const tourn_info = await fetch('https://api.smash.gg/gql/alpha', {
+    const tourn_info = await fetch('https://api.start.gg/gql/alpha', {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + api_key,
@@ -41,7 +41,7 @@ export async function getTournamentEvents(slug) {
         }
     }`;
 
-    const event = await fetch('https://api.smash.gg/gql/alpha', {
+    const event = await fetch('https://api.start.gg/gql/alpha', {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer ' + api_key,

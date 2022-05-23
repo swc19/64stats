@@ -16,6 +16,11 @@
     background-color: lightgray;
 }
 
+.tournament-logo{
+    display:flex;
+    justify-content: center;
+}
+
 .tournament-info{
     position: relative;
     padding: 5%;

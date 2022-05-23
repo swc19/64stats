@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config({path: '../.env'});
 import next from 'next';
-import { apiRouter } from './smashgg/routes.js';
+import { apiRouter } from './startgg/routes.js';
 
 const port = 3000;
 import {sequelize} from "./db.js";
@@ -10,7 +10,7 @@ import {sequelize} from "./db.js";
 
 async function sync() {
     console.log('syncing db');
-    await sequelize.sync({force: false});
+    await sequelize.sync({alter: true});
 }
 sync();
 

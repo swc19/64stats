@@ -1,6 +1,7 @@
 import {path} from '../../../server/db.js';
 import React, { useEffect } from 'react';
 import Head from 'next/Head';
+import Image from 'next/image';
 import styles from '../../styles/tournament.module.css';
 import {Accordion, Pagination} from 'react-bootstrap';
 import SetIndicator from '../../components/SetIndicator.js';
@@ -47,7 +48,6 @@ export default function Tournament({tournament, events, singles_tourney, singles
         window.location.reload();
     }
 
-    // TODO: make this an api call
     function getWinLoss(set_data, player_tag){
         let wins = 0;
         let total = 0;
@@ -137,6 +137,17 @@ export default function Tournament({tournament, events, singles_tourney, singles
         <div><Head><title>{tournament.tourney_name}</title></Head>
             <div className={styles['main']}>
                 <div className={styles['sidebar']}>
+                    {tournament.tourney_image ? 
+                        <div className={styles['tournament-logo']}>
+                            <Image
+                                alt="Tournament Logo"
+                                src={tournament.tourney_image}
+                                width={250}
+                                height={250}
+                                
+                            />
+                        </div>
+                    : null}
                     <div className={styles['tournament-info']}>
                         <h1>{tournament.tourney_name}</h1>
                         <p>{tournament.tourney_location}</p>
@@ -250,12 +261,9 @@ export async function getStaticProps({params}){
     
     async function makeFactsObject(singles_id){
         const facts = {};
-        const most_win_data = await fetch(`${path}/api/v1/set/event/${singles_id}/mostGameWins`).then(res => res.json());
-        facts['most_wins'] = most_win_data;
-        const most_set_wins_data = await fetch(`${path}/api/v1/set/event/${singles_id}/mostSetWins`).then(res => res.json());
-        facts['most_set_wins'] = most_set_wins_data;
-        const most_set_played_data = await fetch(`${path}/api/v1/set/event/${singles_id}/mostSetPlays`).then(res => res.json());
-        facts['most_set_plays'] = most_set_played_data;
+        facts['most_wins'] = await fetch(`${path}/api/v1/set/event/${singles_id}/mostGameWins`).then(res => res.json());
+        facts['most_set_wins'] = await fetch(`${path}/api/v1/set/event/${singles_id}/mostSetWins`).then(res => res.json());
+        facts['most_set_plays'] = await fetch(`${path}/api/v1/set/event/${singles_id}/mostSetPlays`).then(res => res.json());
         return facts;
     }
 

@@ -51,7 +51,7 @@ export default function DataLoader(){
 
             <p>Import Player</p>
             <input type="text" name="player" placeholder="Enter player id" autoComplete="off" onChange={(e) => setNewPlayerID(e.target.value)} />
-            <button onClick={() => PlayerImport(playerID)}>Submit</button>
+            <button onClick={() => playerImport(playerID)}>Submit</button>
             
             <ToastContainer 
                 position="bottom-right"

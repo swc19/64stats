@@ -11,6 +11,9 @@ export async function tourneyImport(slug){
           numAttendees
           startAt
           slug
+          images(type:"profile"){
+            url
+          }
         }
       }`
 
@@ -68,7 +71,8 @@ export async function insertTournament(tournament){
         tourney_location: tournament.venueAddress,
         tourney_start_time: tournament.startAt*1000,
         tourney_entrants: tournament.numAttendees,
-        tourney_slug: tournament.slug.replace('tournament/', '')
+        tourney_slug: tournament.slug.replace('tournament/', ''),
+        tourney_image: tournament.images[0].url
     });
     return tourn.toJSON();
 }

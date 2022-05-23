@@ -42,6 +42,9 @@ const Tournament = sequelize.define('Tournament',{
     },
     tourney_slug: {
         type: DataTypes.STRING,
+    },
+    tourney_image: {
+        type: DataTypes.STRING,
     }
 }, {
     sequelize,
@@ -60,6 +63,9 @@ const Player = sequelize.define('Player', {
         type: DataTypes.STRING
     },
     player_realname: {
+        type: DataTypes.STRING
+    },
+    player_discriminator: {
         type: DataTypes.STRING
     },
     player_country: {

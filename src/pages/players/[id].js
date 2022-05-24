@@ -1,9 +1,41 @@
 import {path} from '../../../server/db.js';
 import React, {useEffect} from 'react';
 import Head from 'next/Head';
+import Image from 'next/image';
 import styles from '../../styles/player.module.css';
 
+
 export default function Player({player, tournament_data}){
+    const logo_height = 24;
+    const logo_width = 24;
+
+    function getBestPlacements(){
+        let placing_ratios = {};
+        tournament_data.map(tournament => {
+            placing_ratios[tournament.tournament_name] = parseInt(tournament.placement)/parseInt(tournament.event_entrants);
+        });
+        const sorted_placings = Object.entries(placing_ratios).sort((a,b) => a[1] - b[1])
+        const best_placing = sorted_placings[0][1];
+        let i=0;
+        let best_placing_obj = {};
+        while(sorted_placings[i][1] === best_placing){
+            const tourney_placement = tournament_data.filter(tournament => tournament.tournament_name === sorted_placings[i][0])[0].placement;
+            const tourney_entrants = tournament_data.filter(tournament => tournament.tournament_name === sorted_placings[i][0])[0].event_entrants;
+            best_placing_obj[sorted_placings[i][0]] = [tourney_placement, tourney_entrants];
+            i++;
+        }
+        return best_placing_obj;
+    }
+    function numberOfTopEights(){
+        let top_eight_count = 0;
+        tournament_data.map(tournament => {
+            if(parseInt(tournament.placement) <= 8){
+                top_eight_count++;
+            }
+        });
+        return top_eight_count;
+    }
+    
     return(
         <><Head><title>64Stats | {player.player_tag}</title></Head>
         <div className={styles['main']}>
@@ -11,9 +43,36 @@ export default function Player({player, tournament_data}){
                 <div className={styles['player-info']}>
                     <h1><a href={`https://start.gg/user/${player.player_discriminator}`}>{player.player_tag}</a></h1>
                     <p>{player.player_realname}</p>
-                    <p>{player.player_country}</p>
-                    {player.player_twitter ? <p>Twitter: <a href={`https://twitter.com/${player.player_twitter}`}>{player.player_twitter}</a></p> : null}
-                    {player.player_twitch ? <p>Twitch: <a href={`https://twitch.tv/${player.player_twitch}`}>{player.player_twitch}</a></p> : null}
+                    <p>
+                        <Image
+                            alt={player.player_country}
+                            src={`https://cdn.jsdelivr.net/gh/madebybowtie/FlagKit@2.2/Assets/SVG/${player.player_country}.svg`}
+                            width={45}
+                            height={30}
+                        />
+                    </p>
+                    {player.player_twitter || player.player_twitch ? <div className={styles['social-media']}>
+                        {player.player_twitter ? <a href={`https://twitter.com/${player.player_twitter}`}><div className={styles['twitter']}>
+                            <Image 
+                                src="/Logo white.svg"
+                                width={logo_width}
+                                height={logo_height}>
+                            </Image>
+                            <span style={{marginLeft: '.35em'}}>{player.player_twitter}</span></div></a> : null}
+                        {player.player_twitch ? <a href={`https://twitch.tv/${player.player_twitch}`}><div className={styles['twitch']}>
+                            <Image 
+                                src="/TwitchGlitchPurple.svg"
+                                width={logo_width}
+                                height={logo_height}>
+                            </Image>
+                            <span style={{marginLeft: '.35em'}}>{player.player_twitch}</span></div></a> : null}
+                    </div> : null}
+                    <br />
+                    <br />
+                    <div>Best Placing: {Object.entries(getBestPlacements()).map(placement => {
+                        return(<span key={placement[0]}>{placement[0]} - {placement[1][0]}{nth(placement[1][0])} out of {placement[1][1]}</span>)
+                    })}</div>
+                    <div>Top 8s: {numberOfTopEights()}</div>
                 </div>
             </div>
             <div className={styles['content-container']}>
@@ -22,12 +81,11 @@ export default function Player({player, tournament_data}){
                     {tournament_data.map((tournament) => {
                         return(
                             <div key={tournament.tournament_id}>
-                                <p>{tournament.placement}{nth(tournament.placement)} @ {tournament.tournament_name} - {tournament.event_name}</p>
+                                <p>{tournament.placement}{nth(tournament.placement)} @ <a href={`/tournaments/${tournament.tournament_slug}`}>{tournament.tournament_name}</a> - {tournament.event_name}</p>
                                 <p>{makeDate(tournament.event_start_time)}</p>
                                 <p>{tournament.event_entrants} Entrants</p>
                                 <br />
                             </div>
-                            
                         )
                     }
                     )}

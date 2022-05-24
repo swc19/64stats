@@ -162,10 +162,10 @@ export default function Tournament({tournament, events, singles_tourney, singles
                     
                     Events:
                     <ul>
-                        {events.filter(event => event.name.includes("64") && (event.name.includes("Singles") || event.name.includes("1v1"))).map(event => {
+                        {events.filter(event => (event.name.includes("Singles") || event.name.includes("1v1"))).map(event => {
                             return (
                                 <li key={event.id}>
-                                    {event.id} - {event.name} <button onClick={() => eventImport(event.id, tournament.tourney_id)}>Import This Event</button>
+                                    {event.id} - {event.name} {!sets ? <button onClick={() => eventImport(event.id, tournament.tourney_id)}>Import This Event</button> : null }
                                 </li>
                             );
                         })} 

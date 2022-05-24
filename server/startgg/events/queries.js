@@ -9,6 +9,9 @@ export async function getEvent(event_id) {
             name
             startAt
             numEntrants
+            videogame{
+                id
+            }
         }
     }`
 
@@ -33,14 +36,17 @@ export async function insertEvent(event_id, tournament_id) {
     if (existing_event) {
         return false;
     }
-    const event_insert = await Event.create({
-        event_id: event_id,
-        tourney_id: tournament_id,
-        event_name: event.name,
-        event_start_time: event.startAt*1000,
-        event_entrants: event.numEntrants
-    });
-    return event_insert.toJSON();
+    console.log(event.videogame.id)
+    if(event.videogame.id == 4) {
+        const event_insert = await Event.create({
+            event_id: event_id,
+            tourney_id: tournament_id,
+            event_name: event.name,
+            event_start_time: event.startAt*1000,
+            event_entrants: event.numEntrants
+        });
+        return event_insert.toJSON();
+    }
 }
 
 //delete an event from the database

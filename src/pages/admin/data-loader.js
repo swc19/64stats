@@ -39,6 +39,21 @@ export default function DataLoader(){
                 "Content-Type": "application/json"
             },
         });
+        toast("Importing Player...")
+        switch(player.status){
+            case 200:
+                toast.dismiss();
+                toast.success("Player Imported");
+                break;
+            case 400:
+                toast.dismiss();
+                toast.info("Player Already Exists");
+                break;
+            case 404:
+                toast.dismiss();
+                toast.error("Player Not Found");
+                break;
+        }
         console.log(player.status);
     }
 

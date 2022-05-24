@@ -40,6 +40,9 @@ export async function getTournamentEvents(slug) {
             events {
                 id
                 name
+                videogame{
+                  id
+                }
             }
         }
     }`;
@@ -54,7 +57,8 @@ export async function getTournamentEvents(slug) {
         body: JSON.stringify({query: tournament_event_query, variables: {"id": tournament_id}})
     });
     const event_json = await event.json();
-    return event_json.data.tournament.events;
+    const events = event_json.data.tournament.events;
+    return events.filter(event => event.videogame.id == 4);
 }
 
 //Insert a new tournament into the database using a tournament object

@@ -11,6 +11,11 @@ export default function SetIndicator(props) {
             return 'DQ';
         }
         if(player.player_tag === set.winner_tag){  
+            if(player_slot === 0 && set.entrant_1_score == "DQ"){
+                return 'W - DQ';
+            } else if(player_slot === 1 && set.entrant_0_score == "DQ"){
+                return 'W - DQ';
+            }
             return 'W';
         } else {
             return 'L';
@@ -18,7 +23,7 @@ export default function SetIndicator(props) {
     }
       
     function setColor(status){
-        if (status === "W"){
+        if (status === "W" || status === "W - DQ"){
             return 'lightgreen'
         } else if (status === "L"){
             return 'lightcoral'

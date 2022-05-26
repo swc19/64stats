@@ -30,6 +30,10 @@ export async function event_info(req, res){
     return all_tournaments;
 }
 
+export async function getH2H(req, res){
+    return await Query.getPlayerH2H(req.params.id);
+}
+
 
 // Get event entrances for a player
 // output: json of event id's

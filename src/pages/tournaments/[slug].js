@@ -64,9 +64,11 @@ export default function Tournament({tournament, events, singles_tourney, singles
 
     const [active, setActive] = React.useState(1);
     const [standings, setStandings] = React.useState([]);
-    let [count, setCount] = React.useState(0);
+    const [count, setCount] = React.useState(0);
 
-    const resultsPerPage = 14;
+    const singles_standings_sorted = singles_standings ? Object.values(singles_standings).sort((a, b) => a.placement - b.placement): null;
+
+    const resultsPerPage = 16;
     let lastIndex = active * resultsPerPage;
     let firstIndex = lastIndex - resultsPerPage;
     const handleChange = (event, value) => {
@@ -78,12 +80,12 @@ export default function Tournament({tournament, events, singles_tourney, singles
         lastIndex = page * resultsPerPage;
         firstIndex = lastIndex - resultsPerPage;
         setActive(page);
-        setStandings(Object.values(singles_standings).sort((a, b) => a.placement - b.placement).slice(firstIndex, lastIndex));
+        setStandings(singles_standings_sorted.slice(firstIndex, lastIndex));
     }
 
     useEffect(() => {
         if (active === 1 && singles_standings) {
-            setStandings(Object.values(singles_standings).sort((a, b) => a.placement - b.placement).slice(0, resultsPerPage));
+            setStandings(singles_standings_sorted.slice(0, resultsPerPage));
         }}, [active]);
     
 
@@ -92,7 +94,7 @@ export default function Tournament({tournament, events, singles_tourney, singles
     useEffect(() => {
         if(singles_standings){
             if (playerName) {
-                const searched_standings = Object.values(singles_standings).sort((a, b) => a.placement - b.placement).filter(player => player.player_tag.toLowerCase().includes(playerName.toLowerCase()))
+                const searched_standings = singles_standings_sorted.filter(player => player.player_tag.toLowerCase().includes(playerName.toLowerCase()))
                 setStandings(searched_standings.slice(firstIndex, lastIndex));
                 /* update number of pagination pages based on filtered standings */
                 setCount(Math.ceil(searched_standings.length / resultsPerPage));
@@ -101,7 +103,7 @@ export default function Tournament({tournament, events, singles_tourney, singles
                 }
                 
             } else {
-                setStandings(Object.values(singles_standings).sort((a, b) => a.placement - b.placement).slice(firstIndex, lastIndex));
+                setStandings(singles_standings_sorted.slice(firstIndex, lastIndex));
                 setCount(Math.ceil(Object.values(singles_standings).length/resultsPerPage));
             }
         }

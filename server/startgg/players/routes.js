@@ -1,6 +1,6 @@
 import express from 'express';
 import {Player} from "../../db.js"
-import { handlePost, event_info} from '../players/handlers.js';
+import { handlePost, event_info, getH2H} from '../players/handlers.js';
 
 export const router = express.Router();
 router.use(express.json());
@@ -13,6 +13,11 @@ router.get('/', async (req, res) => {
 router.use('/:id/events', async (req, res, next) => {
     const player_event_info = await event_info(req, res);
     res.json(player_event_info);
+});
+
+router.use('/:id/h2h', async (req, res, next) => {
+    const player_h2h = await getH2H(req, res);
+    res.json(player_h2h);
 });
 
 // Get a player's details

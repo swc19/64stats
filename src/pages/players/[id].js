@@ -5,7 +5,7 @@ import Image from 'next/image';
 import styles from '../../styles/player.module.css';
 
 
-export default function Player({player, tournament_data}){
+export default function Player({player, tournament_data, player_h2h}){
     const logo_height = 24;
     const logo_width = 24;
 
@@ -36,6 +36,16 @@ export default function Player({player, tournament_data}){
         return top_eight_count;
     }
     
+    function totalSetCount(){
+        let wins = 0;
+        let losses = 0;
+        Object.entries(player_h2h).map((h2h) => {
+            wins+=parseInt(h2h[1].wins);
+            losses+=parseInt(h2h[1].losses);
+        })
+        return [wins,losses];
+    }
+
     return(
         <><Head><title>64Stats | {player.player_tag}</title></Head>
         <div className={styles['main']}>
@@ -73,10 +83,12 @@ export default function Player({player, tournament_data}){
                         return(<span key={placement[0]}>{placement[0]} - {placement[1][0]}{nth(placement[1][0])} out of {placement[1][1]}</span>)
                     })}</div>
                     <div>Top 8s: {numberOfTopEights()}</div>
+                    <div>Total Set Count: {totalSetCount()[0]}-{totalSetCount()[1]}</div>
                 </div>
             </div>
             <div className={styles['content-container']}>
-                <div className={styles['content']}>
+                <div className={styles['tournament-placings']}>
+                    {/*TODO - Pagination, Accordion*/}
                     Tournaments:
                     {tournament_data.map((tournament) => {
                         return(
@@ -90,7 +102,21 @@ export default function Player({player, tournament_data}){
                     }
                     )}
                 </div>
+
+                <div className={styles['h2h']}>
+                    <h2>Head to Head</h2>
+                    {Object.entries(player_h2h).map((h2h) => {
+                        return(
+                            <div key={h2h[1].id}>
+                                <p>{h2h[0]} - {h2h[1].wins}-{h2h[1].losses}</p>
+                            </div>
+                        )
+                    })}
+                </div>
             </div>
+
+
+            
         </div></>
     );
 }
@@ -112,10 +138,12 @@ export async function getStaticProps({params}){
     const id = params.id;
     const player_data = await fetch(`${path}/api/v1/player/${id}`).then(res => res.json());
     const player_tournament_data = await fetch(`${path}/api/v1/player/${id}/events`).then(res => res.json());
+    const player_h2h = await fetch(`${path}/api/v1/player/${id}/h2h`).then(res => res.json());
     return{
         props: {
             player: player_data,
-            tournament_data: player_tournament_data
+            tournament_data: player_tournament_data,
+            player_h2h: player_h2h,
         }
     }
 }

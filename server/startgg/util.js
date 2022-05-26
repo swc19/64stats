@@ -18,8 +18,10 @@ export function getTourneySlugFromURL(url) {
 }
 
 export async function getCountryCode(countryName) {
-    const response = await fetch(`https://restcountries.com/v2/name/${countryName}`);
-    const json = await response.json();
-    return json[0].alpha2Code;
+    if(countryName){
+        const response = await fetch(`https://restcountries.com/v2/name/${countryName}`);
+        const json = await response.json();
+        if(json[0].alpha2Code){return json[0].alpha2Code;}
+    }
 }
 

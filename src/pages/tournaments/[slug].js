@@ -3,7 +3,8 @@ import React, { useEffect } from 'react';
 import Head from 'next/Head';
 import Image from 'next/image';
 import styles from '../../styles/tournament.module.css';
-import {Accordion, Pagination} from 'react-bootstrap';
+import {Accordion, AccordionSummary, AccordionDetails, Pagination} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SetIndicator from '../../components/SetIndicator.js';
 import TourneyFacts from '../../components/TourneyFacts.js';
 
@@ -63,26 +64,15 @@ export default function Tournament({tournament, events, singles_tourney, singles
 
     const [active, setActive] = React.useState(1);
     const [standings, setStandings] = React.useState([]);
-    let [pages, setPages] = React.useState([]);
+    let [count, setCount] = React.useState(0);
+
     const resultsPerPage = 14;
     let lastIndex = active * resultsPerPage;
     let firstIndex = lastIndex - resultsPerPage;
+    const handleChange = (event, value) => {
+        paginate(value);
+    };
 
-    function getPages(standings){
-        if(standings){
-            let page_array = [];
-            for(let i = 1; i < (Math.ceil(Object.values(standings).length / resultsPerPage)+1); i++){
-                page_array.push(
-                    <Pagination.Item key={i} active={active === i} onClick={() => paginate(i)}>{i}</Pagination.Item>
-                );
-            }
-            return page_array;
-        }
-    }
-
-    useEffect(() => {
-        setPages(getPages(singles_standings));
-    }, [active]);
 
     function paginate(page){
         lastIndex = page * resultsPerPage;
@@ -105,14 +95,14 @@ export default function Tournament({tournament, events, singles_tourney, singles
                 const searched_standings = Object.values(singles_standings).sort((a, b) => a.placement - b.placement).filter(player => player.player_tag.toLowerCase().includes(playerName.toLowerCase()))
                 setStandings(searched_standings.slice(firstIndex, lastIndex));
                 /* update number of pagination pages based on filtered standings */
-                let filtered_pages = getPages(searched_standings);
-                setPages(filtered_pages);
-                if(active > filtered_pages.length){
+                setCount(Math.ceil(searched_standings.length / resultsPerPage));
+                if(active != 1){
                     setActive(1);
                 }
+                
             } else {
-                setPages(getPages(singles_standings));
                 setStandings(Object.values(singles_standings).sort((a, b) => a.placement - b.placement).slice(firstIndex, lastIndex));
+                setCount(Math.ceil(Object.values(singles_standings).length/resultsPerPage));
             }
         }
     }, [playerName, firstIndex, lastIndex]);
@@ -132,7 +122,7 @@ export default function Tournament({tournament, events, singles_tourney, singles
         bracket.sort((a, b) => bracketEnum[a.set_bracket_location] < bracketEnum[b.set_bracket_location]);
         return bracket.concat(pools);
     }
-    
+
     return(
         <div><Head><title>{tournament.tourney_name}</title></Head>
             <div className={styles['main']}>
@@ -144,7 +134,6 @@ export default function Tournament({tournament, events, singles_tourney, singles
                                 src={tournament.tourney_image}
                                 width={250}
                                 height={250}
-                                
                             />
                         </div>
                     : null}
@@ -180,46 +169,37 @@ export default function Tournament({tournament, events, singles_tourney, singles
                             <input className={styles['search-bar']} type="text" placeholder="Search for a player" value={playerName} onChange={e => setPlayerName(e.target.value)} />
                         </div>
                         <div className={styles['standings']}>
-                            <Accordion defaultActiveKey="0" className={styles['accordion']} alwaysOpen>
                                 {singles_standings ? standings.map(player => {
-                                    return (
-                                        <div key={player.player_id}>
-                                            <Accordion.Item eventKey={player.player_id} className={styles['accordion-item']}>
-                                                <Accordion.Button className={styles['accordion-button']}>
-                                                
-                                                    <span className={styles['accordion-header']}>
-                                                        {player.placement}{nth(player.placement)} -- {player.player_tag}
-                                                    </span>
-                                                
-                                                </Accordion.Button>
-                                                <Accordion.Body>
-                                                    <div className={styles['set-indicator-wrapper']}>
-                                                        {setSort(sets.filter(set => set.entrant_0_tag === player.player_tag || set.entrant_1_tag === player.player_tag)).map(set => {
-                                                            return (
-                                                                <SetIndicator key={set.set_id} player={player} set={set} />
-                                                            );
-                                                        })}
-                                                    </div>
-                                                    {player.player_tag} got {player.placement}{nth(player.placement)} in {singles_tourney.event_name} at {tournament.tourney_name}.
-                                                    They went {getWinLoss(sets, player.player_tag)}.
-                                                </Accordion.Body>
-                                            </Accordion.Item>
-                                        </div>
+                                    return (     
+                                        <Accordion disableGutters className={styles['Accordion']} key={player.player_id}>
+                                        <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{
+                                            outline: '2px solid black',
+                                            marginTop: '2px',
+                                        }}>
+                                            {player.placement}{nth(player.placement)} -- {player.player_tag}
+                                        </AccordionSummary>
+                                            <AccordionDetails sx={{
+                                                backgroundColor: 'lightgrey',
+                                            }}>
+                                                <div className={styles['set-indicator-wrapper']}>
+                                                    {setSort(sets.filter(set => set.entrant_0_tag === player.player_tag || set.entrant_1_tag === player.player_tag)).map(set => {
+                                                        return (
+                                                            <SetIndicator key={set.set_id} player={player} set={set} />
+                                                        );
+                                                    })}
+                                                </div>
+                                                {player.player_tag} got {player.placement}{nth(player.placement)} in {singles_tourney.event_name} at {tournament.tourney_name}.
+                                                They went {getWinLoss(sets, player.player_tag)}.
+                                            </AccordionDetails> 
+                                        </Accordion>
                                     );
                                 }) : null}
-                            </Accordion>
+                            
                             {singles_standings ? 
-                            <div className={styles['pagination-wrapper']}><Pagination className={styles['pagination']}>
-                                <Pagination.Prev
-                                    onClick={() => paginate(active - 1)}
-                                    disabled={active === 1} 
-                                    />
-                                {pages}
-                                <Pagination.Next
-                                    onClick={() => paginate(active + 1)}
-                                    disabled={active === Math.ceil(Object.values(singles_standings).length / resultsPerPage)} 
-                                    />
-                            </Pagination></div> : null}
+                            <div className={styles['pagination-wrapper']}>
+                                <Pagination className={styles['pagination']} count={count} onChange={handleChange} siblingCount={12}>
+                                    
+                                </Pagination></div> : null}
                         </div><br /></>
                         : <p>No Event Imported</p>}
                 </div>

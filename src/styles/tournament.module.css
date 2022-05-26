@@ -3,7 +3,7 @@
     width:100%;
     min-height:100vh;
     font-family: Roboto, sans-serif;
-    background-color: darkgrey;
+    background-color: rgb(197, 197, 197);
 
 }
 
@@ -44,39 +44,27 @@
     width: 80%;
     height: 100%;
     margin: 0 auto;
-    outline: 2px solid black;
 }
 
-.accordion{
+.Accordion{
     width: 100%;
 }
 
-.accordion-header{
-    color:black;
+.Accordion:nth-child(odd){
+    background-color: rgba(104, 146, 69, 0.25);
 }
-.accordion-button{
-    outline:2px solid black;
-}
-.accordion-button:not(.collapsed){
-    background-color: rgba(36, 255, 237, 0.226);
-}
-.accordion div:nth-child(odd) > div > button{
-    background-color: rgba(36, 255, 237, 0.326);
-}
-.accordion-button:focus{
-    box-shadow:none;
-}
-.accordion-item{
-    background-color: lightgrey;
+.Accordion:nth-child(even){
+    background-color: rgba(104, 146, 69, 0.45);
 }
 
 .pagination{
+    display: flex;
     z-index: -1;
-    margin-top: 1px;
-    outline: 1px solid black;
-}
-.pagination li{
-    border: 1px solid black;
+    margin-top: 2px;
+    outline: 2px solid black;
+    height: 2.5em;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .set-indicator-wrapper{
@@ -94,6 +82,7 @@
     display: flex;
     justify-content: center;
 }
-.pagination{
-    flex-wrap: wrap;
+.search-bar:focus{
+    outline: none;
 }
+

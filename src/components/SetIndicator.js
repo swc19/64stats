@@ -1,5 +1,6 @@
 import styles from '../styles/setindicator.module.css';
-import {Popover, OverlayTrigger} from 'react-bootstrap';
+import Tooltip from '@mui/material/Tooltip';
+import React from 'react';
 
 
 export default function SetIndicator(props) {
@@ -48,13 +49,54 @@ export default function SetIndicator(props) {
         }
     }
 
-    return (<OverlayTrigger trigger={["hover", "focus"]} placement="top" overlay={
-        <Popover id="popover-basic">
-            <Popover.Header as="h3">vs. {getPlayerText(props.set)}</Popover.Header>
-            <Popover.Body>
-                {props.set.set_bracket_location} -- {getScoreOrder(props.set)}
-            </Popover.Body>
-        </Popover>}>
-        <div className={styles['set-indicator']} style={{backgroundColor: setColor(getWin(props.set, props.player))}}><strong>{getWin(props.set, props.player)}</strong></div>
-    </OverlayTrigger>)
+    return (
+        <div className={styles['tooltip']}>
+        <Tooltip
+                title={
+                    <React.Fragment>
+                        <p style={{
+                            fontSize: "2em", 
+                            padding: ".5em 2em 0 2em", 
+                            textAlign: "center"
+                            }}>
+                            vs. {getPlayerText(props.set)}
+                        </p>
+                        <hr></hr>
+                        <p style={{
+                            fontSize: "1.5em", 
+                            padding: "0 2em 0 2em", 
+                            textAlign: "center"
+                            }}>
+                            {props.set.set_bracket_location} -- {getScoreOrder(props.set)}
+                        </p>
+                    </React.Fragment>
+                    }
+                placement="top"
+                PopperProps={{
+                    sx: {
+                        "& .MuiTooltip-tooltipArrow": {
+                            backgroundColor: 'rgba(126, 126, 126, 1)',
+                            border: "2px solid black",
+                            maxWidth: "none",
+                            "& hr": {
+                                backgroundColor: "black",
+                                border: "2px solid black",
+                                width: "100%",
+                            }
+                        },
+                        "& .MuiTooltip-arrow": {
+                            color: 'rgba(126, 126, 126, 1)',
+                            "&::before": {
+                                border: "2px solid black",
+                            },
+                        }
+                    }
+                }}
+                arrow
+                disableInteractive
+        >
+                    <div className={styles['set-indicator']} style={{ backgroundColor: setColor(getWin(props.set, props.player)) }}><strong>{getWin(props.set, props.player)}</strong></div>
+        </Tooltip>
+        </div>
+   )
 }

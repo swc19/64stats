@@ -60,6 +60,7 @@
     align-items: center;
     align-self: center;
     height: 36px;
+    outline: 2px solid black;
 }
 .twitter {
     background-color: hsl(206, 82%, 63%);
@@ -71,6 +72,7 @@
 
 .twitch{
     background-color: hsl(264, 100%, 75%);
+    margin-top: 2px;
 }
 
 .twitch:hover{

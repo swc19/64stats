@@ -9,6 +9,7 @@ export default function Player({player, tournament_data, player_h2h}){
     const logo_height = 24;
     const logo_width = 24;
 
+
     function getBestPlacements(){
         let placing_ratios = {};
         tournament_data.map(tournament => {
@@ -45,6 +46,18 @@ export default function Player({player, tournament_data, player_h2h}){
         })
         return [wins,losses];
     }
+
+    
+    function sortH2H(player_h2h){
+        return Object.entries(player_h2h).sort((a,b) =>
+            // sort by most wins + losses, then by win ratio
+            (b[1].wins + b[1].losses) - (a[1].wins + a[1].losses)
+            ||
+            (b[1].win_ratio) - (a[1].win_ratio) 
+        );
+    }
+
+
 
     return(
         <><Head><title>64Stats | {player.player_tag}</title></Head>
@@ -105,10 +118,10 @@ export default function Player({player, tournament_data, player_h2h}){
 
                 <div className={styles['h2h']}>
                     <h2>Head to Head</h2>
-                    {Object.entries(player_h2h).map((h2h) => {
+                    {sortH2H(player_h2h).map((h2h) => {
                         return(
                             <div key={h2h[1].id}>
-                                <p>{h2h[0]} - {h2h[1].wins}-{h2h[1].losses}</p>
+                                <p>{h2h[0]} - {h2h[1].wins}-{h2h[1].losses} -- {Math.round(100*h2h[1].win_ratio)}%</p>
                             </div>
                         )
                     })}

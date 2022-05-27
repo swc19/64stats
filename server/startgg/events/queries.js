@@ -36,7 +36,6 @@ export async function insertEvent(event_id, tournament_id) {
     if (existing_event) {
         return false;
     }
-    console.log(event.videogame.id)
     if(event.videogame.id == 4) {
         const event_insert = await Event.create({
             event_id: event_id,

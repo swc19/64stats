@@ -141,11 +141,18 @@ export async function setImport(event_id) {
                 set_object.winner_tag = set_object.entrant_1_tag;
             }
             if(set_object.entrant_0 === -1 && set_object.entrant_1 === -1){
-
                 if(set_object.entrant_0_score === "W" || set_object.entrant_1_score === "DQ"){
                     set_object.winner_tag = set_object.entrant_0_tag;
                 }
                 if(set_object.entrant_1_score === "W" || set_object.entrant_0_score === "DQ"){
+                    set_object.winner_tag = set_object.entrant_1_tag;
+                }
+                if(set_object.entrant_0_score === 2 && set_object.entrant_1_score < 2 
+                    || (set_object.entrant_0_score === 3 && set_object.entrant_1_score < 3)){
+                    set_object.winner_tag = set_object.entrant_0_tag;
+                }
+                if(set_object.entrant_1_score === 2 && set_object.entrant_0_score < 2
+                    || (set_object.entrant_1_score === 3 && set_object.entrant_0_score < 3)){
                     set_object.winner_tag = set_object.entrant_1_tag;
                 }
             }

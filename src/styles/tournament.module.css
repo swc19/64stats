@@ -8,7 +8,7 @@
 }
 
 .sidebar{
-    position: fixed;
+    position: absolute;
     width: 450px;
     height: 100%;
     top: 0;

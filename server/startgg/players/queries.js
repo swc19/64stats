@@ -126,13 +126,12 @@ export async function getPlayerH2H(player_id){
       }
       // So much repetitive code!
       if(set.entrant_0 === player_id){
-        let entrant_1;
         if(!other){
           if(! await Player.findByPk(set.entrant_1)){
             // Insert player into database if they don't yet exist
             await insertPlayer(set.entrant_1);
           }
-          entrant_1 = await Player.findByPk(set.entrant_1);
+          let entrant_1 = await Player.findByPk(set.entrant_1);
           entrant_1 = entrant_1.dataValues;
         } else {
           entrant_1 = {player_tag: set.entrant_1_tag, player_id: other_id};
@@ -157,12 +156,11 @@ export async function getPlayerH2H(player_id){
           }
         }
       } else {
-        let entrant_0;
         if(!other){
           if(! await Player.findByPk(set.entrant_0)){
             await insertPlayer(set.entrant_0);
           }
-          entrant_0 = await Player.findByPk(set.entrant_0);
+          let entrant_0 = await Player.findByPk(set.entrant_0);
           entrant_0 = entrant_0.dataValues;
         } else {
           entrant_0 = {player_tag: set.entrant_0_tag, player_id: other_id};
